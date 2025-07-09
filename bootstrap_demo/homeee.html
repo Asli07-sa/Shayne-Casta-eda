@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Directory</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+      color: #37474f;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff6f00;
+      margin-bottom: 30px;
+    }
+
+    .wrapper {
+      background-color: #ffffff;
+      max-width: 960px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    form input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    form button {
+      margin-top: 20px;
+      background-color: #ff8f00;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: #ff6f00;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background-color: #ffe0b2;
+      color: #bf360c;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    .delete-btn {
+      background-color: #e53935;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .delete-btn:hover {
+      background-color: #c62828;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Team Directory</h1>
+
+  <div class="wrapper">
+    <form id="employeeForm">
+      <label for="empId">Employee ID</label>
+      <input type="text" id="empId" placeholder="e.g. T001" required />
+
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" placeholder="e.g. Mendoza" required />
+
+      <label for="position">Position</label>
+      <input type="text" id="position" placeholder="e.g. Developer" required />
+
+      <label for="office">Office</label>
+      <input type="text" id="office" placeholder="e.g. Makati" required />
+
+      <button type="submit">Add Employee</button>
+    </form>
+
+    <table id="employeeTable">
+      <thead>
+        <tr>
+          <th>Employee ID</th>
+          <th>Last Name</th>
+          <th>Position</th>
+          <th>Office</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Employee rows will be added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", loadEmployees);
+
+    document.getElementById("employeeForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const empId = document.getElementById("empId").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const position = document.getElementById("position").value.trim();
+      const office = document.getElementById("office").value.trim();
+
+      if (!empId || !lastName || !position || !office) {
+        alert("Please complete all fields.");
+        return;
+      }
+
+      const employee = { empId, lastName, position, office };
+      saveEmployee(employee);
+      this.reset();
+    });
+
+    function saveEmployee(employee) {
+      const employees = JSON.parse(localStorage.getItem("teamEmployees")) || [];
+      employees.push(employee);
+      localStorage.setItem("teamEmployees", JSON.stringify(employees));
+      loadEmployees();
+    }
+
+    function loadEmployees() {
+      const employees = JSON.parse(localStorage.getItem("teamEmployees")) || [];
+      const tbody = document.querySelector("#employeeTable tbody");
+      tbody.innerHTML = "";
+
+      employees.forEach((emp, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${emp.empId}</td>
+          <td>${emp.lastName}</td>
+          <td>${emp.position}</td>
+          <td>${emp.office}</td>
+          <td><button class="delete-btn" onclick="deleteEmployee(${index})">Delete</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function deleteEmployee(index) {
+      const employees = JSON.parse(localStorage.getItem("teamEmployees")) || [];
+      employees.splice(index, 1);
+      localStorage.setItem("teamEmployees", JSON.stringify(employees));
+      loadEmployees();
+    }
+  </script>
+
+</body>
+</html>

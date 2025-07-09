@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Employee Console</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e3f2fd;
+      margin: 0;
+      padding: 40px 20px;
+      color: #0d47a1;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1565c0;
+      margin-bottom: 30px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .form-group input {
+      flex: 1 1 20%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #90caf9;
+      border-radius: 6px;
+    }
+
+    .form-group button {
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .form-group button:hover {
+      background-color: #1565c0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #bbdefb;
+      text-align: left;
+    }
+
+    th {
+      background-color: #e3f2fd;
+      color: #0d47a1;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f5faff;
+    }
+
+    .delete-btn {
+      background-color: #ef5350;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .delete-btn:hover {
+      background-color: #c62828;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>EMPLOYEE LIST</h1>
+
+  <div class="container">
+    <div class="form-group">
+      <input type="text" id="empId" placeholder="Employee ID" />
+      <input type="text" id="lastName" placeholder="Last Name" />
+      <input type="text" id="position" placeholder="Position" />
+      <input type="text" id="office" placeholder="Office" />
+      <button onclick="addEmployee()">Add</button>
+    </div>
+
+    <table id="employeeTable">
+      <thead>
+        <tr>
+          <th>Employee ID</th>
+          <th>Last Name</th>
+          <th>Position</th>
+          <th>Office</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="employeeBody">
+        <!-- Dynamic rows appear here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function addEmployee() {
+      const empId = document.getElementById("empId").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const position = document.getElementById("position").value.trim();
+      const office = document.getElementById("office").value.trim();
+
+      if (!empId || !lastName || !position || !office) {
+        alert("Please fill out all fields.");
+        return;
+      }
+
+      const tbody = document.getElementById("employeeBody");
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${empId}</td>
+        <td>${lastName}</td>
+        <td>${position}</td>
+        <td>${office}</td>
+        <td><button class="delete-btn" onclick="this.parentElement.parentElement.remove()">Delete</button></td>
+      `;
+
+      tbody.appendChild(row);
+
+      // Clear input fields
+      document.getElementById("empId").value = "";
+      document.getElementById("lastName").value = "";
+      document.getElementById("position").value = "";
+      document.getElementById("office").value = "";
+    }
+  </script>
+
+</body>
+</html>
